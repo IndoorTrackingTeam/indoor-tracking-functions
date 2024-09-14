@@ -54,7 +54,7 @@ jobs:
         run: |-
           docker build \
             --tag "us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ar-backend/${{ env.IMAGE }}-prod:latest" \
-            ./functions
+            ./
 
       - name: Publish Docker Image to Artifact Registry
         run: |-
