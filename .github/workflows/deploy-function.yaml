@@ -75,7 +75,7 @@ jobs:
             --schedule "*/5 * * * *" \
             --uri "https://us-east1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT }}/jobs/trigger-update-location-job:run" \
             --http-method POST \
-            --oauth-service-account-email ${{ secrets.GCP_SCHEDULER_SA_EMAIL }} \
+            --oauth-service-account-email ${{ secrets.GCP_SA_KEY }} \
             --time-zone "America/Sao_Paulo" \
           || echo "Scheduler already exists, updating it..."
 
@@ -85,5 +85,5 @@ jobs:
             --schedule "*/5 * * * *" \
             --uri "https://us-east1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT }}/jobs/trigger-update-location-job:run" \
             --http-method POST \
-            --oauth-service-account-email ${{ secrets.GCP_SCHEDULER_SA_EMAIL }} \
+            --oauth-service-account-email ${{ secrets.GCP_SA_KEY }} \
             --time-zone "America/Sao_Paulo"
