@@ -14,7 +14,7 @@ on:
 
 env:
   IMAGE: trigger-update-location
-  MEMORY: 128Mi
+  MEMORY: 512Mi
   TIMEOUT: 60
   REGION: us-east1
 
