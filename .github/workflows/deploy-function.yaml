@@ -1,4 +1,4 @@
-name: Build deploy Funtion and Scheduler PROD
+name: Build deploy PROD
 
 on:
   workflow_dispatch:
