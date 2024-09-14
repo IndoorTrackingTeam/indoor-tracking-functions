@@ -67,7 +67,7 @@ jobs:
             --memory $MEMORY \
             --region $REGION \
             --max-retries 3 \
-            --timeout $TIMEOUT
+            --task-timeout $TIMEOUT
 
       - name: Create Cloud Scheduler Job
         run: |
