@@ -77,6 +77,7 @@ jobs:
             --http-method POST \
             --oauth-service-account-email ${{ secrets.GCP_SA_KEY }} \
             --time-zone "America/Sao_Paulo" \
+            --location us-east1 \
           || echo "Scheduler already exists, updating it..."
 
       - name: Update Cloud Scheduler Job (if exists)
@@ -86,4 +87,5 @@ jobs:
             --uri "https://us-east1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT }}/jobs/trigger-update-location-job:run" \
             --http-method POST \
             --oauth-service-account-email ${{ secrets.GCP_SA_KEY }} \
+            --location us-east1 \
             --time-zone "America/Sao_Paulo"
