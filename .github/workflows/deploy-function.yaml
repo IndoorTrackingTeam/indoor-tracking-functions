@@ -47,8 +47,8 @@ jobs:
             --memory $MEMORY \
             --timeout $TIMEOUT \
             --region $REGION \
-            --source ./functions
-
+            --source .
+            
       - name: Create Cloud Scheduler Job
         run: |
           gcloud scheduler jobs create http my-scheduler-job \
