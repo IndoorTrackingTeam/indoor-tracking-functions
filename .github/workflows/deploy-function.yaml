@@ -13,13 +13,14 @@ on:
       - main
 
 env:
-  MEMORY: 128MB
+  IMAGE: trigger-update-location
+  MEMORY: 128Mi
   TIMEOUT: 60
   REGION: us-east1
 
 jobs:
   deploy:
-    name: Deploy Function and Scheduler
+    name: Deploy Cloud Run Job and Scheduler
     runs-on: ubuntu-latest
     environment: production
 
@@ -38,30 +39,51 @@ jobs:
       - name: Use gcloud CLI
         run: gcloud info
 
-      - name: Deploy Cloud Function from Source Code in functions folder
-        run: |
-          gcloud functions deploy trigger-update-location \
-            --runtime python310 \
-            --trigger-http \
-            --allow-unauthenticated \
+      - name: Login to GCR
+        uses: docker/login-action@v1
+        with:
+          registry: gcr.io
+          username: _json_key
+          password: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Docker configuration
+        run: |-
+          gcloud auth configure-docker us-east1-docker.pkg.dev
+
+      - name: Build Docker Image
+        run: |-
+          docker build \
+            --tag "us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ar-backend/${{ env.IMAGE }}-prod:latest" \
+            ./functions
+
+      - name: Publish Docker Image to Artifact Registry
+        run: |-
+          docker push "us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ar-backend/${{ env.IMAGE }}-prod:latest"
+
+      - name: Deploy Cloud Run Job
+        run: |-
+          gcloud run jobs deploy trigger-update-location-job \
+            --image "us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/ar-backend/${{ env.IMAGE }}-prod:latest" \
             --memory $MEMORY \
-            --timeout $TIMEOUT \
             --region $REGION \
-            --source ./functions
+            --max-retries 3 \
+            --timeout $TIMEOUT
 
       - name: Create Cloud Scheduler Job
         run: |
           gcloud scheduler jobs create http my-scheduler-job \
             --schedule "*/5 * * * *" \
-            --uri "https://$REGION-${{ secrets.GCP_PROJECT }}.cloudfunctions.net/trigger-update-location" \
-            --http-method GET \
+            --uri "https://us-east1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT }}/jobs/trigger-update-location-job:run" \
+            --http-method POST \
+            --oauth-service-account-email ${{ secrets.GCP_SCHEDULER_SA_EMAIL }} \
             --time-zone "America/Sao_Paulo" \
           || echo "Scheduler already exists, updating it..."
 
-      - name: Update Cloud Scheduler Job
+      - name: Update Cloud Scheduler Job (if exists)
         run: |
           gcloud scheduler jobs update http my-scheduler-job \
             --schedule "*/5 * * * *" \
-            --uri "https://$REGION-${{ secrets.GCP_PROJECT }}.cloudfunctions.net/trigger-update-location" \
-            --http-method GET \
+            --uri "https://us-east1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT }}/jobs/trigger-update-location-job:run" \
+            --http-method POST \
+            --oauth-service-account-email ${{ secrets.GCP_SCHEDULER_SA_EMAIL }} \
             --time-zone "America/Sao_Paulo"
