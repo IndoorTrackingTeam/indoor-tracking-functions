@@ -4,7 +4,7 @@ from bson import json_util
 from database.config_db import Database
 from models.equipment_model import UpdateEquipmentsHistoric, UpdateEquipmentsCurrentRoom
 
-class EquipmentDAO: # DAO - Data Access Object
+class EquipmentDAO:
     def __init__(self):
         self.db = Database(collection='equipment')
 

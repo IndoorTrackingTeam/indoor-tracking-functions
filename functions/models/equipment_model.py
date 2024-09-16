@@ -2,8 +2,6 @@ from typing import Annotated, List, Optional
 from pydantic import BaseModel, BeforeValidator, Field
 from datetime import datetime
 
-# Represents an ObjectId field in the database.
-# It will be represented as a `str` on the model so that it can be serialized to JSON.
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
 class EquipmentCurrentDateAndRoom(BaseModel):

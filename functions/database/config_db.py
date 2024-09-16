@@ -1,6 +1,5 @@
-import pymongo
 import os
-from dotenv import load_dotenv
+import pymongo
 
 load_dotenv()
 

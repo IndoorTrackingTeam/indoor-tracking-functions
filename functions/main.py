@@ -15,7 +15,6 @@ def update_equipments_location():
         all_esp = equipmentDAO.get_all_esp_id()
 
         for esp in all_esp:
-            print(f'Updating location of ESP {esp["esp_id"]}')
             new_url = url + esp['esp_id']
             response = requests.get(new_url)
 
@@ -37,7 +36,6 @@ def update_database(equipmentDAO, new_current_room, esp_id, num_try):
 
         equipmentDAO.update_historic(UpdateEquipmentsHistoric(esp_id = esp_id, room = new_current_room, initial_date = date_key))
         equipmentDAO.update_current_room(UpdateEquipmentsCurrentRoom(esp_id = esp_id, c_room = new_current_room), date_key)
-        print(f'Location of ESP {esp_id} updated successfully')
             
     except Exception as e:
         print(f"Error when connecting with database: {e}")

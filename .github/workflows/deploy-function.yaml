@@ -15,7 +15,7 @@ on:
 env:
   IMAGE: trigger-update-location
   MEMORY: 512Mi
-  TIMEOUT: 60
+  TIMEOUT: 300
   REGION: us-east1
   DB_URL: ${{ secrets.DB_URL }}
   ENV_QA: ${{ secrets.ENV_QA }}
