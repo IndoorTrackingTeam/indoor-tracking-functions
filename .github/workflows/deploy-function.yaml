@@ -17,6 +17,8 @@ env:
   MEMORY: 512Mi
   TIMEOUT: 60
   REGION: us-east1
+  DB_URL: ${{ secrets.DB_URL }}
+  ENV_QA: ${{ secrets.ENV_QA }}
 
 jobs:
   deploy:
@@ -67,12 +69,14 @@ jobs:
             --memory $MEMORY \
             --region $REGION \
             --max-retries 3 \
-            --task-timeout $TIMEOUT
+            --task-timeout $TIMEOUT \
+            --set-env-vars=DB_URL=$DB_URL \
+            --set-env-vars=ENV_QA=$ENV_QA
 
       - name: Create Cloud Scheduler Job
         run: |
           gcloud scheduler jobs create http my-scheduler-job \
-            --schedule "*/5 * * * *" \
+            --schedule "0 */3 * * *" \
             --uri "https://us-east1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT }}/jobs/trigger-update-location-job:run" \
             --http-method POST \
             --oauth-service-account-email ${{ secrets.SA_EMAIL }} \
@@ -83,7 +87,7 @@ jobs:
       - name: Update Cloud Scheduler Job (if exists)
         run: |
           gcloud scheduler jobs update http my-scheduler-job \
-            --schedule "*/5 * * * *" \
+            --schedule "0 */3 * * *" \
             --uri "https://us-east1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT }}/jobs/trigger-update-location-job:run" \
             --http-method POST \
             --oauth-service-account-email ${{ secrets.SA_EMAIL }} \
