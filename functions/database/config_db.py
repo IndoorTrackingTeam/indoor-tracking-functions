@@ -1,8 +1,6 @@
 import os
 import pymongo
 
-load_dotenv()
-
 class Database:
     def __init__(self, collection):
         database = 'indoor_db'
