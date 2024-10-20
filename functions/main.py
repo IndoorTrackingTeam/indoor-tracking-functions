@@ -29,9 +29,7 @@ def update_equipments_location():
 def update_database(equipmentDAO, new_current_room, esp_id, num_try):
     num_try += 1
     try:
-        sp_tz = ZoneInfo("America/Sao_Paulo")
-
-        date = datetime.now(sp_tz)
+        date = datetime.now()
         date_key = date.strftime("%Y-%m-%d %H:%M:%S")
 
         equipmentDAO.update_historic(UpdateEquipmentsHistoric(esp_id = esp_id, room = new_current_room, initial_date = date_key))
