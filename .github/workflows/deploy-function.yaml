@@ -17,6 +17,7 @@ env:
   MEMORY: 512Mi
   TIMEOUT: 300
   REGION: us-east1
+  DB_NAME: ${{ secrets.DB_NAME }}
   DB_URL: ${{ secrets.DB_URL }}
   ENV_QA: ${{ secrets.ENV_QA }}
 
