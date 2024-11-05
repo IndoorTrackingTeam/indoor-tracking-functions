@@ -76,7 +76,7 @@ jobs:
       - name: Create Cloud Scheduler Job
         run: |
           gcloud scheduler jobs create http my-scheduler-job \
-            --schedule "0 */3 * * *" \
+            --schedule "*/5 * * * *" \
             --uri "https://us-east1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT }}/jobs/trigger-update-location-job:run" \
             --http-method POST \
             --oauth-service-account-email ${{ secrets.SA_EMAIL }} \
@@ -87,7 +87,7 @@ jobs:
       - name: Update Cloud Scheduler Job (if exists)
         run: |
           gcloud scheduler jobs update http my-scheduler-job \
-            --schedule "0 */3 * * *" \
+            --schedule "*/5 * * * *" \
             --uri "https://us-east1-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT }}/jobs/trigger-update-location-job:run" \
             --http-method POST \
             --oauth-service-account-email ${{ secrets.SA_EMAIL }} \
