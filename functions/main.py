@@ -18,10 +18,20 @@ def update_equipments_location():
             new_url = url + esp['esp_id']
             response = requests.get(new_url)
 
-            if response.status_code == 200:
-                update_database(equipmentDAO, response.json(), esp['esp_id'], 0)
+            print(f"response: {response.json()}")
+
+            if response.status_code == 200 and response.json() != "":
+                new_current_room = response.json()
+                equipment = equipmentDAO.get_current_room_and_date(esp['esp_id'])
+                if str(new_current_room) != str(equipment['c_room']):
+                    update_database(equipmentDAO, new_current_room, esp['esp_id'], 0)
+                else:
+                    print("It didn`t move")
             else:
-                print(f'Erro {response.status_code}: {response.text}')
+                if response.json() == "":
+                    print(f'It wasn`t possible to get the room: {response.text}')
+                else:
+                    print(f'Erro {response.status_code}: {response.text}')
                 
     except Exception as e:
         print(f'Error when making the request: {e}')

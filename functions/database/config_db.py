@@ -1,11 +1,11 @@
 import os
 import pymongo
+# from dotenv import load_dotenv
 
+# load_dotenv()
 class Database:
     def __init__(self, collection):
-        database = 'indoor_db'
-        if os.getenv('ENV_QA') == "True":
-            database = 'indoor_db_QA'
+        database = os.getenv('DB_NAME')
 
         self.connect(database, collection) 
 
