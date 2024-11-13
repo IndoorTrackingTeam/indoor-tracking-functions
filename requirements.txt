@@ -2,3 +2,4 @@ pymongo
 requests
 pydantic
 python-dotenv
+pytest-cov
