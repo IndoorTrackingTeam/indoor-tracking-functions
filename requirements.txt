@@ -2,4 +2,3 @@ pymongo
 requests
 pydantic
 python-dotenv
-backports.zoneinfo
