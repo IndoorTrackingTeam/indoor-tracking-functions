@@ -1,7 +1,5 @@
 from datetime import datetime
-import time
 import requests
-from zoneinfo import ZoneInfo
 
 from database.repositories.equipment_repository import EquipmentDAO
 from models.equipment_model import UpdateEquipmentsCurrentRoom, UpdateEquipmentsHistoric
@@ -22,11 +20,14 @@ def update_equipments_location():
 
             if response.status_code == 200 and response.json() != "":
                 new_current_room = response.json()
+                print(esp['esp_id'])
                 equipment = equipmentDAO.get_current_room_and_date(esp['esp_id'])
                 if str(new_current_room) != str(equipment['c_room']):
-                    update_database(equipmentDAO, new_current_room, esp['esp_id'], 0)
+                    update_database(equipmentDAO, new_current_room, esp['esp_id'], equipment)
                 else:
                     print("It didn`t move")
+                equipmentDAO.update_current_date(esp['esp_id'])
+                
             else:
                 if response.json() == "":
                     print(f'It wasn`t possible to get the room: {response.text}')
@@ -36,14 +37,13 @@ def update_equipments_location():
     except Exception as e:
         print(f'Error when making the request: {e}')
 
-def update_database(equipmentDAO, new_current_room, esp_id, num_try):
-    num_try += 1
+def update_database(equipmentDAO, new_current_room, esp_id, equipment):
     try:
         date = datetime.now()
-        date_key = date.strftime("%Y-%m-%d %H:%M:%S")
+        print(equipment['initial_date']['$date'])
 
-        equipmentDAO.update_historic(UpdateEquipmentsHistoric(esp_id = esp_id, room = new_current_room, initial_date = date_key))
-        equipmentDAO.update_current_room(UpdateEquipmentsCurrentRoom(esp_id = esp_id, c_room = new_current_room), date_key)
+        equipmentDAO.update_historic(UpdateEquipmentsHistoric(esp_id = esp_id, room = equipment['c_room'], initial_date = equipment['initial_date']['$date']))
+        equipmentDAO.update_current_room(UpdateEquipmentsCurrentRoom(esp_id = esp_id, c_room = new_current_room), date)
             
     except Exception as e:
         print(f"Error when connecting with database: {e}")

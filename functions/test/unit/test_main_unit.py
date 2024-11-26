@@ -1,4 +1,3 @@
-import pytest
 from unittest.mock import MagicMock, patch
 from datetime import datetime
 from main import update_equipments_location, update_database, UpdateEquipmentsHistoric, UpdateEquipmentsCurrentRoom
@@ -40,23 +39,25 @@ def test_update_equipments_location_http_error(mock_get, MockEquipmentDAO):
     
 
 # Teste para garantir que update_historic e update_current_room são chamados corretamente
-def test_update_database_success():
+@patch('main.datetime')
+def test_update_database_success(mock_datetime_now):
    
     mock_equipmentDAO = MagicMock()
     
     esp_id = '12345'
     new_current_room = 'new_room'
-    num_try = 0
+    equipment = {'name': 'Multi Parameter Monitor', 'register': 'PAT1111', 'c_room': 'Emergency', 'initial_date': {'$date': '2024-08-08T19:54:14Z'}}
 
-    update_database(mock_equipmentDAO, new_current_room, esp_id, num_try)
+    mock_datetime_now.now.return_value = datetime(2024,11,10,20,30,00)
 
-    date_key = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    update_database(mock_equipmentDAO, new_current_room, esp_id, equipment)
+
     mock_equipmentDAO.update_historic.assert_called_once_with(UpdateEquipmentsHistoric(
-        esp_id=esp_id, room=new_current_room, initial_date=date_key
+        esp_id=esp_id, room=equipment['c_room'], initial_date=equipment['initial_date']['$date']
     ))
     mock_equipmentDAO.update_current_room.assert_called_once_with(UpdateEquipmentsCurrentRoom(
         esp_id=esp_id, c_room=new_current_room
-    ), date_key)
+    ), datetime(2024,11,10,20,30,00))
 
 # Teste para verificar o tratamento de exceção
 def test_update_database_exception():
@@ -65,9 +66,10 @@ def test_update_database_exception():
 
     esp_id = '12345'
     new_current_room = 'new_room'
-    num_try = 0
 
-    update_database(mock_equipmentDAO, new_current_room, esp_id, num_try)
+    equipment = {'name': 'Multi Parameter Monitor', 'register': 'PAT1111', 'c_room': 'Emergency', 'initial_date': {'$date': '2024-08-08T19:54:14Z'}}
+
+    update_database(mock_equipmentDAO, new_current_room, esp_id, equipment)
 
     mock_equipmentDAO.update_historic.assert_called_once()
     mock_equipmentDAO.update_current_room.assert_not_called() 
