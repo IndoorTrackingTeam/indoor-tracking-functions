@@ -18,3 +18,9 @@ class UpdateEquipmentsHistoric(BaseModel):
 class UpdateEquipmentsCurrentRoom(BaseModel):
     esp_id: str = Field(...)
     c_room: str = Field(...)
+
+class NotificationBody(BaseModel):
+    equipment_name: str = Field(...)
+    register_: str = Field(...)
+    date: datetime = Field(...)
+    location: str = Field(...)

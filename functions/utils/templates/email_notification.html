@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Play', sans-serif;
+            background-color: #F5F7F8;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .email-header {
+            margin-bottom: 20px;
+        }
+        .email-header img {
+            max-width: 120px;
+            height: auto;
+            margin: 0 auto;
+            display: block; 
+        }
+        .email-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            text-align: left;
+            border-top: 2px solid #F1B600;
+        }
+        .email-body {
+            margin: 0;
+        }
+        .email-body h2 {
+            color: #2D2D2D;
+            margin-bottom: 10px;
+        }
+        .email-body p {
+            color: #2D2D2D;
+            margin-bottom: 20px;
+        }
+        .email-body a {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            background-color: #394170;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .email-body a:hover {
+            background-color: #2C40B0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-header"> 
+        <img src="cid:logo" alt="Company Logo">
+    </div>
+    <div class="email-container">
+        <div class="email-body">
+            <h2>O equipamento {{name}} mudou de sala!</h2>
+            <p>Data: {{date}}</p>
+            <p>Nova localização: {{location}}</p>
+        </div>
+    </div>
+</body>
+</html>
