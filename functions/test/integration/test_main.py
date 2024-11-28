@@ -20,7 +20,8 @@ def config_mongo():
 @patch('database.repositories.equipment_repository.datetime')
 @patch('main.EquipmentDAO.get_all_esp_id')
 @patch('main.requests.get')
-def test_update_equipments_location_integration_success(mock_get, mock_get_all_esp_id, mock_repository_datetime_now, mock_service_datetime_now):
+@pytest.mark.asyncio
+async def test_update_equipments_location_integration_success(mock_get, mock_get_all_esp_id, mock_repository_datetime_now, mock_service_datetime_now):
 
     mock_get_all_esp_id.return_value = [{'esp_id': '1111'}]
 
@@ -33,7 +34,7 @@ def test_update_equipments_location_integration_success(mock_get, mock_get_all_e
     mock_repository_datetime_now.now.return_value = datetime(2024,11,10,20,30,00)
     mock_service_datetime_now.now.return_value = datetime(2024,11,10,20,30,00)
 
-    update_equipments_location()
+    await update_equipments_location()
 
     client = MongoClient(os.getenv('DB_URL'), tlsAllowInvalidCertificates=True)
     db = client['indoor_db_QA']  # Collection específica para testes
