@@ -10,7 +10,7 @@ import pytest
 @pytest.mark.asyncio
 async def test_update_equipments_location_success(mock_get, mock_get_all_esp_id, mock_get_current_room_and_date):
     
-    mock_get_all_esp_id.return_value = [{'esp_id': '12345'}]
+    mock_get_all_esp_id.return_value = [{'esp_id': '1111'}]
     
     mock_response = MagicMock()
     mock_response.status_code = 200
@@ -21,7 +21,7 @@ async def test_update_equipments_location_success(mock_get, mock_get_all_esp_id,
 
     await update_equipments_location()
 
-    mock_get.assert_called_with('https://run-machine-learning-api-prod-694723526996.us-east1.run.app/model-training/get-esp-position?esp_id=12345')
+    mock_get.assert_called_with('https://run-machine-learning-api-prod-694723526996.us-east1.run.app/model-training/get-esp-position?esp_id=1111')
 
 
 # Teste para verificar se as funções do banco de dados não estão sendo chamadas

@@ -1,6 +1,6 @@
 import json
 from bson import json_util
-from datetime import datetime
+from datetime import datetime, timezone
 
 from database.config_db import Database
 from models.equipment_model import UpdateEquipmentsHistoric, UpdateEquipmentsCurrentRoom
@@ -58,7 +58,7 @@ class EquipmentDAO:
         
     def update_current_date(self, esp_id: str):
         try:
-            date = datetime.now()
+            date = datetime.now(timezone.utc)
 
             res = self.db.collection.update_one({'esp_id': esp_id},{'$set': {'c_date': date}})
 

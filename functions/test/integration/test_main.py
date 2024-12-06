@@ -5,6 +5,7 @@ import pytest
 import os
 
 from test.mock_equipment import create_valid_equipments
+from test.mock_router_data import valid_router_data
 from main import update_equipments_location
 
 @pytest.fixture(scope="session", autouse=True)
@@ -12,8 +13,10 @@ def config_mongo():
     client = MongoClient(os.getenv('DB_URL'), tlsAllowInvalidCertificates=True)
     db = client['indoor_db_QA']  # Collection específica para testes
     db['equipment'].insert_many(create_valid_equipments())
+    db['router-data'].insert_one(valid_router_data())
     yield db
     db['equipment'].delete_many({})
+    db['router-data'].delete_many({})
 
 # Testando função quando mudar a localização
 @patch('main.datetime')
