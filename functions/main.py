@@ -55,10 +55,6 @@ def update_database(equipmentDAO, new_current_room, esp_id, equipment, date):
     except Exception as e:
         print(f"Error when connecting with database: {e}")
 
-# Uso
-# if __name__ == "__main__":
-    # run_async_task(update_equipments_location())
 
 if __name__ == "__main__":
     asyncio.run(update_equipments_location())
-# update_equipments_location()
